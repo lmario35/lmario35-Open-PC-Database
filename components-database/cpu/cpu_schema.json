@@ -11,7 +11,7 @@
       },
       "brand": {
         "type": "string",
-        "description": "Brand of the CPU (e.g., Intel, AMD)."
+        "description": "Brand of the CPU (e.g., Intel, AMD, Intel)."
       },
       "model": {
         "type": "string",
