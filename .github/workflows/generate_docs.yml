@@ -3,8 +3,8 @@ name: Generate Documentation
 on:
   push:
     paths:
-      - '**/*_schema.json'   # Déclencher le workflow sur toute modification d'un fichier JSON Schema
-  workflow_dispatch:           # Permet de lancer le workflow manuellement si nécessaire
+      - '**/*_schema.json'   # Trigger workflow on changes to any JSON Schema
+  workflow_dispatch:           # Allow manual triggering of the workflow
 
 jobs:
   generate-docs:
@@ -14,20 +14,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
       with:
-        node-version: '20'
+        python-version: '3.x'
 
-    - name: Install jsonschema2md
-      run: npm install -g jsonschema2md
-
-    - name: Generate Documentation for All Components
-      run: |
-        find . -name '*_schema.json' | while read schema; do
-          doc_file="${schema/_schema.json/.md}"
-          jsonschema2md -i "$schema" -o "$doc_file"
-        done
+    - name: Run documentation generation script
+      run: python scripts/generate_docs.py
 
     - name: Commit and Push Changes
       run: |
