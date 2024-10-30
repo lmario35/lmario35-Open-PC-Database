@@ -1,0 +1,40 @@
+name: Generate Documentation
+
+on:
+  push:
+    paths:
+      - '**/*_schema.json'   # Déclencher le workflow sur toute modification d'un fichier JSON Schema
+  workflow_dispatch:           # Permet de lancer le workflow manuellement si nécessaire
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install jsonschema2md
+      run: npm install -g jsonschema2md
+
+    - name: Generate Documentation for All Components
+      run: |
+        find . -name '*_schema.json' | while read schema; do
+          doc_file="${schema/_schema.json/.md}"
+          jsonschema2md -i "$schema" -o "$doc_file"
+        done
+
+    - name: Commit and Push Changes
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add */*.md
+        git commit -m "Auto-generated documentation for updated schemas"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
