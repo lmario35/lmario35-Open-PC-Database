@@ -1,0 +1,167 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "CPU Schema",
+    "description": "JSON Schema for validating CPU entries in the components database.",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier for the CPU (UUID).",
+        "format": "uuid"
+      },
+      "brand": {
+        "type": "string",
+        "description": "Brand of the CPU (e.g., Intel, AMD)."
+      },
+      "model": {
+        "type": "string",
+        "description": "Model name of the CPU."
+      },
+      "architecture": {
+        "type": "string",
+        "description": "Architecture of the CPU (e.g., Coffee Lake, Zen 3)."
+      },
+      "socket": {
+        "type": "string",
+        "description": "Socket type of the CPU (e.g., LGA1151, AM4)."
+      },
+      "cores": {
+        "type": "integer",
+        "description": "Number of physical cores in the CPU.",
+        "minimum": 1
+      },
+      "threads": {
+        "type": "integer",
+        "description": "Number of threads in the CPU.",
+        "minimum": 1
+      },
+      "base_clock": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Base clock speed of the CPU."
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["GHz", "MHz"],
+            "description": "Unit of the base clock speed."
+          }
+        },
+        "required": ["value", "unit"],
+        "description": "Base clock speed information."
+      },
+      "boost_clock": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Boost clock speed of the CPU."
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["GHz", "MHz"],
+            "description": "Unit of the boost clock speed."
+          }
+        },
+        "required": ["value", "unit"],
+        "description": "Boost clock speed information."
+      },
+      "l3_cache": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Size of the L3 cache."
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["MB", "KB"],
+            "description": "Unit of the L3 cache size."
+          }
+        },
+        "required": ["value", "unit"],
+        "description": "L3 cache information."
+      },
+      "tdp": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Thermal Design Power (TDP) of the CPU."
+          },
+          "unit": {
+            "type": "string",
+            "enum": ["W"],
+            "description": "Unit of the TDP."
+          }
+        },
+        "required": ["value", "unit"],
+        "description": "Thermal Design Power (TDP) information."
+      },
+      "release_year": {
+        "type": "integer",
+        "description": "Year the CPU was released.",
+        "minimum": 1970
+      },
+      "integrated_graphics": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "description": "Model of the integrated GPU."
+              },
+              "base_clock": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Base clock speed of the integrated GPU."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": ["GHz", "MHz"],
+                    "description": "Unit of the base clock speed."
+                  }
+                },
+                "required": ["value", "unit"],
+                "description": "Base clock speed information of the integrated GPU."
+              },
+              "max_clock": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "description": "Maximum clock speed of the integrated GPU."
+                  },
+                  "unit": {
+                    "type": "string",
+                    "enum": ["GHz", "MHz"],
+                    "description": "Unit of the maximum clock speed."
+                  }
+                },
+                "required": ["value", "unit"],
+                "description": "Maximum clock speed information of the integrated GPU."
+              }
+            },
+            "required": ["model", "base_clock", "max_clock"],
+            "description": "Information about the integrated GPU."
+          },
+          {
+            "type": "null",
+            "description": "Indicates the absence of integrated graphics."
+          }
+        ],
+        "description": "Integrated graphics information, if applicable."
+      },
+      "last_modified": {
+        "type": "string",
+        "description": "Date of the last modification (in ISO 8601 format).",
+        "format": "date"
+      }
+    },
+    "required": ["id", "brand", "model", "architecture", "socket", "cores", "threads", "base_clock", "boost_clock", "l3_cache", "tdp", "release_year", "last_modified"]
+  }
+  
